@@ -2,22 +2,24 @@ import os
 import discord
 from dotenv import load_dotenv
 
+from discord.ext import commands
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 SYS_MSSG = os.getenv('DISCORD_SYS_MSSG')
 # initializes client
-client = discord.Client()
+bot = commands.Bot(command_prefix='>>')
 
 # defines event handler for when client connects to discord
 @client.event
 async def on_ready():
-    for guild in client.guilds:
+    for guild in bot.guilds:
         if guild.name == GUILD:
             break
     
     print(
-        f'{client.user} has connected to the following Discord guild:\n'
+        f'{bot.user} has connected to the following Discord guild:\n'
         f'{guild.name}(id: {guild.id})'    
     )
 
@@ -27,7 +29,7 @@ async def on_ready():
 # when new member joins the server
 @client.event
 async def on_member_join(member):
-    for guild in client.guilds:
+    for guild in bot.guilds:
         if guild.name == GUILD:
             break
     # send message to the system messages channel
@@ -40,7 +42,7 @@ async def on_member_join(member):
     await channel2.send(
         f'Hi {member.name}, welcome to {guild.name}!'
     )
-client.run(TOKEN)
+    bot.run(TOKEN)
 
 
 
