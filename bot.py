@@ -6,11 +6,14 @@
 import os
 import discord
 import random
+import asyncio
+from discord import opus
 from dotenv import load_dotenv
 
 from discord.ext import commands
 
 load_dotenv()
+
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 SYS_MSSG = os.getenv('DISCORD_SYS_MSSG')
@@ -60,12 +63,12 @@ async def help_list(ctx):
     )
     await ctx.send(response)
 
-@bot.command(name='join', help='Joins the bot testing voice channel')
+@bot.command(name='join', help='Joins the current channel')
 async def join_test(ctx):
-    channel = bot.get_channel(int(BOT_VOICE_CH))
+    channel = ctx.author.voice.channel
     await channel.connect()
 
-@bot.command(name='leave', help='Leaves the bot testing voice channel', catagory='commands')
+@bot.command(name='leave', help='Leaves the current channel', catagory='commands')
 async def leave_test(ctx):
     await ctx.voice_client.disconnect() 
 
@@ -89,6 +92,12 @@ async def create_channel(ctx, name, is_voice: bool):
             print(f'Creating a new text channel with name: {name}.')
             await ctx.channel.send(f'Creating a new text channel with name: {name}.')
             await guild.create_text_channel(name, category=ctx.channel.category)
+
+@bot.command(name='play', help='Plays from an audio source (Not Functional)')
+async def plays(ctx, source):
+    vc = bot.voice_clients[0]
+    audio_src = discord.PCMAudio('C:\\Users\\Francois\\Music\\Downloaded by MediaHuman\\The Black Keys - Little Black Submarines.mp3')
+    await vc.play(audio_src)
 bot.run(TOKEN)
 
 
