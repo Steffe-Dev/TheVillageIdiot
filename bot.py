@@ -1,5 +1,11 @@
+# Discord Bot for The Village
+#
+# Known Issues:
+#   if roll is called without a param, no msg is displayed to correct the user.
+
 import os
 import discord
+import random
 from dotenv import load_dotenv
 
 from discord.ext import commands
@@ -45,14 +51,12 @@ async def on_member_join(member):
     )
 
 
-@bot.command(name='h')
+@bot.command(name='hi', help='Prints a greeting')
 async def help_list(ctx):
     response = (
         'Hi there! I\'m an experimental bot written by the admin of this server, STeFFe, and my capabilities are rather limited - hence the name.\n\n'
-        'Here follows a list of ther commands currently supported:\n'
-        '>>h:    Displays this list\n'
-        '\n'
         'My creator hopes to improve my functionality in the future.'
+        'Use the >>help command for a list of what I can do.'
     )
     await ctx.send(response)
 
@@ -61,10 +65,30 @@ async def join_test(ctx):
     channel = bot.get_channel(int(BOT_VOICE_CH))
     await channel.connect()
 
-@bot.command(name='leave', help='Leaves the bot testing voice channel')
+@bot.command(name='leave', help='Leaves the bot testing voice channel', catagory='commands')
 async def leave_test(ctx):
     await ctx.voice_client.disconnect() 
 
+@bot.command(name='roll', help='Rolls a random number between 0 and the specified max(inclusive)')
+async def roll(ctx, max: int):
+    num = random.randint(0,max)
+    fin = str(num)
+    await ctx.send(f'{ctx.author.name} rolled {fin}')
+
+@bot.command(name='create_channel', help='Creates a new channel in current category, with params <channel_name> <is_voice> (Use True/False)')
+@commands.has_role('Admin')
+async def create_channel(ctx, name, is_voice: bool):
+    guild = ctx.guild
+    existing_channel = discord.utils.get(guild.channels,name=name)
+    if not existing_channel:
+        if is_voice:
+            print(f'Creating a new voice channel with name: {name}.')
+            await ctx.channel.send(f'Creating a new voice channel with name: {name}.')
+            await guild.create_voice_channel(name, category=ctx.channel.category)
+        else:
+            print(f'Creating a new text channel with name: {name}.')
+            await ctx.channel.send(f'Creating a new text channel with name: {name}.')
+            await guild.create_text_channel(name, category=ctx.channel.category)
 bot.run(TOKEN)
 
 
