@@ -52,6 +52,11 @@ async def on_member_join(member):
     await channel2.send(
         f'Hi {member.name}, welcome to {guild.name}!'
     )
+    role = discord.utils.get(member.guild.roles, name="Member")
+    await member.add_roles(role)
+
+# @bot.event
+# async def on_join_v
 
 
 @bot.command(name='hi', help='Prints a greeting')
