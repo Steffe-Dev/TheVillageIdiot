@@ -10,6 +10,10 @@ import asyncio
 from discord import opus
 from dotenv import load_dotenv
 
+import urllib, io
+import re
+
+
 from discord.ext import commands
 
 load_dotenv()
@@ -55,8 +59,39 @@ async def on_member_join(member):
     role = discord.utils.get(member.guild.roles, name="Member")
     await member.add_roles(role)
 
-# @bot.event
-# async def on_join_v
+# Webhook stuff
+@bot.event
+async def on_message(message):
+    await bot.process_commands(message)
+    if message.content.startswith(">>"):
+        return
+    for guild in bot.guilds:
+        if guild.name == GUILD:
+            break
+    for channel in guild.channels:
+        if channel.name == 'meme-theater':
+            break
+    urls = re.findall("https://i.redd.it/.*[jpgif]{3}", message.content)
+    
+    if message.channel.name == "memes-raw":
+        if len(urls) > 0:
+            await channel.send(urls[0])
+        else:
+            await channel.send("No match")
+
+
+@bot.command(name='wipe_channel', help='wipes all messages on a channel')
+async def wipe(ctx, channel):
+    for g in bot.guilds:
+        if g.name == GUILD:
+            break
+    for cnl in g.channels:
+        if cnl.name == channel:
+            break
+    print(f"deleting messages in {cnl}!",)
+    async for message in cnl.history(limit=1000):
+        await discord.Message.delete(message)
+
 
 
 @bot.command(name='hi', help='Prints a greeting')
