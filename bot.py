@@ -71,7 +71,7 @@ async def on_message(message):
     for channel in guild.channels:
         if channel.name == 'meme-theater':
             break
-    urls = re.findall("https://i.redd.it/.*[jpngif]{3}", message.content)
+    urls = re.findall("https://i.redd.it/.*[.]{1}[jpngif]{3}", message.content)
     
     if message.channel.name == "memes-raw":
         if len(urls) > 0:
