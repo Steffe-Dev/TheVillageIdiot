@@ -107,6 +107,7 @@ async def wipe(ctx, channel):
 async def help_list(ctx):
     response = (
         'Hi there! I\'m an experimental bot written by the admin of this server, STeFFe, and my capabilities are rather limited - hence the name.\n\n'
+        'I can apparently post memes, though. xD\n'
         'My creator hopes to improve my functionality in the future.'
         'Use the >>help command for a list of what I can do.'
     )
