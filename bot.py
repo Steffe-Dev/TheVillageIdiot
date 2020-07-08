@@ -82,7 +82,7 @@ async def on_message(message):
 
     #another r/unexpected format
     if len(urls) == 0:
-        urls = re.findall("https://i.imgur.com/.*[gifv]{3}", message.content)
+        urls = re.findall("https://i.imgur.com/.*[.]{1}[jpngif]{3}", message.content)
 
     if message.channel.name == "memes-raw":
         if len(urls) > 0:
@@ -104,7 +104,7 @@ async def wipe(ctx, channel, contains):
         if message.content.find(contains) != -1:
             await discord.Message.delete(message)
 
-            
+
 
 @bot.command(name='meme', help='sends a random meme from the meme theater')
 async def meme(ctx):
