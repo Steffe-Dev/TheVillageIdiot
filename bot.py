@@ -71,8 +71,17 @@ async def on_message(message):
     for channel in guild.channels:
         if channel.name == 'meme-theater':
             break
+    #standard meme format    
     urls = re.findall("https://i.redd.it/.*[.]{1}[jpngif]{3}", message.content)
-    
+
+    #check if r/unexpected
+    if len(urls) == 0:
+        urls = re.findall("https://v.redd.it/.{13}", message.content)
+
+    #another r/unexpected format
+    if len(urls) == 0:
+        urls = re.findall("https://i.imgur.com/.*[gifv]{3}", message.content)
+
     if message.channel.name == "memes-raw":
         if len(urls) > 0:
             await channel.send(urls[0])
