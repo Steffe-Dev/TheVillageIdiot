@@ -65,12 +65,14 @@ async def on_message(message):
     await bot.process_commands(message)
     if message.content.startswith(">>"):
         return
-    for guild in bot.guilds:
-        if guild.name == GUILD:
-            break
-    for channel in guild.channels:
-        if channel.name == 'meme-theater':
-            break
+    # for guild in bot.guilds:
+    #     if guild.name == GUILD:
+    #         break
+    # for channel in guild.channels:
+    #     if channel.name == 'meme-theater':
+    #         break
+
+    channel = find_channel('meme-theater')
     #standard meme format    
     urls = re.findall("https://i.redd.it/.*[.]{1}[jpngif]{3}", message.content)
 
@@ -89,17 +91,37 @@ async def on_message(message):
             await channel.send("No match")
 
 
-@bot.command(name='wipe_channel', help='wipes all messages on a channel')
-async def wipe(ctx, channel):
-    for g in bot.guilds:
-        if g.name == GUILD:
+@bot.command(name='wipe_channel', help='wipes all messages on a channel containing a substring')
+async def wipe(ctx, channel, contains):
+    # for g in bot.guilds:
+    #     if g.name == GUILD:
+    #         break
+    # for cnl in g.channels:
+    #     if cnl.name == channel:
+    #         break
+    cnl = find_channel(channel)
+    async for message in cnl.history(limit=1000000000):
+        if message.content.find(contains) != -1:
+            await discord.Message.delete(message)
+
+            
+
+@bot.command(name='meme', help='sends a random meme from the meme theater')
+async def meme(ctx):
+    channel = find_channel('meme-theater')
+    num = random.randint(0,10000)
+    i = 0
+    async for message in channel.history(limit=100000):
+        i += 1
+        print(f'{i}\'th msg, and it is: {message.content}')
+        if message.content.startswith('N'):
+            continue
+        if i < num:
+            continue
+
+        if message.content.startswith('https://i.redd.it'):
             break
-    for cnl in g.channels:
-        if cnl.name == channel:
-            break
-    print(f"deleting messages in {cnl}!",)
-    async for message in cnl.history(limit=1000):
-        await discord.Message.delete(message)
+    await ctx.channel.send(message.content)
 
 
 
@@ -148,6 +170,21 @@ async def plays(ctx, source):
     vc = bot.voice_clients[0]
     audio_src = discord.PCMAudio('C:\\Users\\Francois\\Music\\Downloaded by MediaHuman\\The Black Keys - Little Black Submarines.mp3')
     await vc.play(audio_src)
+
+#functions
+def find_channel(cnl):
+    for guild in bot.guilds:
+        if guild.name == GUILD:
+            break
+    for channel in guild.channels:
+        if channel.name == cnl:
+            return channel
+
+
+
+
+
+
 bot.run(TOKEN)
 
 
