@@ -109,11 +109,15 @@ async def wipe(ctx, channel, contains):
 @bot.command(name='meme', help='sends a random meme from the meme theater')
 async def meme(ctx):
     channel = find_channel('meme-theater')
-    num = random.randint(0,10000)
+    max = 0
+    async for message in channel.history(limit=100000):
+        max += 1
+
+    num = random.randint(0,max)
     i = 0
     async for message in channel.history(limit=100000):
         i += 1
-        print(f'{i}\'th msg, and it is: {message.content}')
+        print(f'{i}\'th msg, and it is: {message.content}. Num is {num}')
         if message.content.startswith('N'):
             continue
         if i < num:
