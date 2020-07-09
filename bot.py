@@ -79,7 +79,7 @@ async def on_message(message):
         urls = re.findall("https://i.imgur.com/.{13}[.]{1}[jpngif]{3}", message.content)
     
     if len(urls) == 0:
-        urls = re.findall("https://.*[.]{1}[jpngif]{3}", message.content)
+        urls = re.findall("https://i.*[.]{1}[jpngif]{3}", message.content)
 
     if message.channel.name == "memes-raw":
         if len(urls) > 0:
