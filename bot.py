@@ -65,16 +65,10 @@ async def on_message(message):
     await bot.process_commands(message)
     if message.content.startswith(">>"):
         return
-    # for guild in bot.guilds:
-    #     if guild.name == GUILD:
-    #         break
-    # for channel in guild.channels:
-    #     if channel.name == 'meme-theater':
-    #         break
 
     channel = find_channel('meme-theater')
     #standard meme format    
-    urls = re.findall("https://i.redd.it/.*[.]{1}[jpngif]{3}", message.content)
+    urls = re.findall("https://i.redd.it/.{13}[.]{1}[jpngif]{3}", message.content)
 
     #check if r/unexpected
     if len(urls) == 0:
@@ -82,7 +76,7 @@ async def on_message(message):
 
     #another r/unexpected format
     if len(urls) == 0:
-        urls = re.findall("https://i.imgur.com/.*[.]{1}[jpngif]{3}", message.content)
+        urls = re.findall("https://i.imgur.com/.{13}[.]{1}[jpngif]{3}", message.content)
 
     if message.channel.name == "memes-raw":
         if len(urls) > 0:
@@ -93,12 +87,6 @@ async def on_message(message):
 
 @bot.command(name='wipe_channel', help='wipes all messages on a channel containing a substring')
 async def wipe(ctx, channel, contains):
-    # for g in bot.guilds:
-    #     if g.name == GUILD:
-    #         break
-    # for cnl in g.channels:
-    #     if cnl.name == channel:
-    #         break
     cnl = find_channel(channel)
     async for message in cnl.history(limit=1000000000):
         if message.content.find(contains) != -1:
@@ -108,6 +96,23 @@ async def wipe(ctx, channel, contains):
 
 @bot.command(name='meme', help='sends a random meme from the meme theater')
 async def meme(ctx):
+    li = [
+        "Please wait while I fetch you a quality meme from our collection...\n",
+        "Your meme shall be  summoned shortly...\n",
+        "Loading dank meme...\n",
+        "Allow me a few moments to procure your meme...\n",
+        "To meme, or not to meme...\n",
+        "Scanning meme database...\n",
+        "Loading meme cannon...\n",
+        "The suspense created while waiting for a meme is scientifically proven to increase its effective funniness...\n",
+        "Every sixty seconds in Africa, one minute passes...\n",
+        "Wait for it, wait for it...\n",
+        "Any second now...\n"
+    ]
+
+    msg_num = random.randint(0,len(li)-1)
+    await ctx.channel.send(li[msg_num])
+
     channel = find_channel('meme-theater')
     max = 0
     async for message in channel.history(limit=100000):
@@ -125,9 +130,16 @@ async def meme(ctx):
 
         if message.content.startswith('https://i.redd.it'):
             break
+    
+    print(f'Number of memes in database: {max}')
     await ctx.channel.send(message.content)
 
 
+@bot.command(name='games_list', help='Prints a list of the games that Chad and STeFFe plays together')
+async def games_list(ctx):
+    file_name = open("C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\Chad_games.txt", 'r')
+    for line in file_name:
+        await ctx.channel.send(line)
 
 @bot.command(name='hi', help='Prints a greeting')
 async def help_list(ctx):
