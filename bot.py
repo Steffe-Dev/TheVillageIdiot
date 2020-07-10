@@ -155,7 +155,7 @@ async def open_text(ctx, name):
         await ctx.channel.send("Could not locate a file with that name!")
 
 @bot.command(name='delete_text_file', help='Deletes a text file (They are saved on my pc, and then on a public github)')
-@commands.has_role('Admin')
+@commands.has_role('Chiefz')
 async def delete_text(ctx, name):
     try:
         file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
@@ -165,7 +165,7 @@ async def delete_text(ctx, name):
         await ctx.channel.send("Could not locate a file with that name!")
 
 @bot.command(name='list_files', help='List all created text files (They are saved on my pc, and then on a public github)')
-async def list_text(ctx, name):
+async def list_text(ctx):
     path = 'C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\'
 
     files = []
@@ -203,7 +203,7 @@ async def roll(ctx, max: int):
     await ctx.send(f'{ctx.author.name} rolled {fin}')
 
 @bot.command(name='create_channel', help='Creates a new channel in current category, with params <channel_name> <is_voice> (Use True/False)')
-@commands.has_role('Admin')
+@commands.has_role('Chiefz')
 async def create_channel(ctx, name, is_voice: bool):
     guild = ctx.guild
     existing_channel = discord.utils.get(guild.channels,name=name)
