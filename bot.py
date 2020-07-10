@@ -148,7 +148,7 @@ async def note(ctx, name, note):
 async def open_text(ctx, name):
     try:
         file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
-        await ctx.channel.send("Opening file:")
+        await ctx.channel.send(f"Opening file: {name}.txt")
         for line in file_name:
             await ctx.channel.send(line)
     except:
