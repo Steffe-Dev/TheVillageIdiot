@@ -144,8 +144,8 @@ async def note(ctx, name, note):
     await ctx.channel.send("Successfully wrote to file")
         
 
-@bot.command(name='open_text_file', help='Opens a text file from my pc\n Currently supported:\nChad_games.txt, Grim_Dawn.txt')
-async def games_list(ctx, name):
+@bot.command(name='open_text_file', help='Opens a text file (They are saved on my pc, and then on a public github, so no sensitive info)')
+async def open_text(ctx, name):
     try:
         file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
         await ctx.channel.send("Opening file:")
@@ -154,7 +154,27 @@ async def games_list(ctx, name):
     except:
         await ctx.channel.send("Could not locate a file with that name!")
 
+@bot.command(name='open_text_file', help='Deletes a text file (They are saved on my pc, and then on a public github)')
+async def delete_text(ctx, name):
+    try:
+        file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
+        await ctx.channel.send("Deleting file:")
+        os.remove(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt")
+    except:
+        await ctx.channel.send("Could not locate a file with that name!")
 
+@bot.command(name='list_files', help='List all created text files (They are saved on my pc, and then on a public github)')
+async def delete_text(ctx, name):
+    path = 'C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\'
+
+    files = []
+    # r=root, d=directories, f = files
+    for r, d, f in os.walk(path):
+        for file in f:
+            if '.txt' in file:
+                files.append(file)
+    for f in files:
+        await ctx.channel.send(f)
 
 @bot.command(name='hi', help='Prints a greeting')
 async def help_list(ctx):
