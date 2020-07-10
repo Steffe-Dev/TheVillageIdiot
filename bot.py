@@ -157,11 +157,10 @@ async def open_text(ctx, name):
 @bot.command(name='delete_text_file', help='Deletes a text file (They are saved on my pc, and then on a public github)')
 @commands.has_role('Chiefz')
 async def delete_text(ctx, name):
-    try:
-        file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
+    if os.path.exists(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt"):
         await ctx.channel.send("Deleting file:")
         os.remove(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt")
-    except:
+    else:
         await ctx.channel.send("Could not locate a file with that name!")
 
 @bot.command(name='list_files', help='List all created text files (They are saved on my pc, and then on a public github)')
