@@ -154,7 +154,8 @@ async def open_text(ctx, name):
     except:
         await ctx.channel.send("Could not locate a file with that name!")
 
-@bot.command(name='open_text_file', help='Deletes a text file (They are saved on my pc, and then on a public github)')
+@bot.command(name='delete_text_file', help='Deletes a text file (They are saved on my pc, and then on a public github)')
+@commands.has_role('Admin')
 async def delete_text(ctx, name):
     try:
         file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
