@@ -137,14 +137,14 @@ async def meme(ctx):
     print(f'Number of memes in database: {max}')
     await ctx.channel.send(message.content)
 
-@bot.command(name='note', help='Makes a note that can be recalled. Usage: >>Note *name* *content*')
+@bot.command(name='note', help='Makes a note that can be recalled. \nUsage: >>note *name* *content*')
 async def note(ctx, name, note):
     file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'a')
     file_name.write(note)
     await ctx.channel.send("Successfully wrote to file")
         
 
-@bot.command(name='open_text_file', help='Opens a text file (They are saved on my pc, and then on a public github, so no sensitive info)')
+@bot.command(name='open_text_file', help='Opens a text file \n(They are saved on my pc, and then on a public github, so no sensitive info)')
 async def open_text(ctx, name):
     try:
         file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
@@ -154,7 +154,7 @@ async def open_text(ctx, name):
     except:
         await ctx.channel.send("Could not locate a file with that name!")
 
-@bot.command(name='delete_text_file', help='Deletes a text file (They are saved on my pc, and then on a public github)')
+@bot.command(name='delete_text_file', help='Deletes a text file \n(They are saved on my pc, and then on a public github)')
 @commands.has_role('Chiefz')
 async def delete_text(ctx, name):
     if os.path.exists(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt"):
@@ -163,7 +163,7 @@ async def delete_text(ctx, name):
     else:
         await ctx.channel.send("Could not locate a file with that name!")
 
-@bot.command(name='list_files', help='List all created text files (They are saved on my pc, and then on a public github)')
+@bot.command(name='list_files', help='List all created text files \n(They are saved on my pc, and then on a public github)')
 async def list_text(ctx):
     path = 'C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\'
 
