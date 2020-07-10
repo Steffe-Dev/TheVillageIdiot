@@ -137,18 +137,24 @@ async def meme(ctx):
     print(f'Number of memes in database: {max}')
     await ctx.channel.send(message.content)
 
-#Deprecated
-@bot.command(name='games_list', help='Prints a list of the games that Chad and STeFFe plays together')
-async def games_list(ctx):
-    file_name = open("C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\Chad_games.txt", 'r')
-    for line in file_name:
-        await ctx.channel.send(line)
+@bot.command(name='note', help='Makes a note that can be recalled. Usage: >>Note *name* *content*')
+async def note(ctx, name, note):
+    file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'a')
+    file_name.write(note)
+    await ctx.channel.send("Successfully wrote to file")
+        
 
 @bot.command(name='open_text_file', help='Opens a text file from my pc\n Currently supported:\nChad_games.txt, Grim_Dawn.txt')
 async def games_list(ctx, name):
-    file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}", 'r')
-    for line in file_name:
-        await ctx.channel.send(line)
+    try:
+        file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}", 'r')
+        await ctx.channel.send("Opening file:")
+        for line in file_name:
+            await ctx.channel.send(line)
+    except:
+        await ctx.channel.send("Could not locate a file with that name!")
+
+
 
 @bot.command(name='hi', help='Prints a greeting')
 async def help_list(ctx):
