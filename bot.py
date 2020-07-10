@@ -147,7 +147,7 @@ async def note(ctx, name, note):
 @bot.command(name='open_text_file', help='Opens a text file from my pc\n Currently supported:\nChad_games.txt, Grim_Dawn.txt')
 async def games_list(ctx, name):
     try:
-        file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}", 'r')
+        file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
         await ctx.channel.send("Opening file:")
         for line in file_name:
             await ctx.channel.send(line)
