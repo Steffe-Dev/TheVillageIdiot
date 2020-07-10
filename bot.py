@@ -164,7 +164,7 @@ async def delete_text(ctx, name):
         await ctx.channel.send("Could not locate a file with that name!")
 
 @bot.command(name='list_files', help='List all created text files (They are saved on my pc, and then on a public github)')
-async def delete_text(ctx, name):
+async def list_text(ctx, name):
     path = 'C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\'
 
     files = []
