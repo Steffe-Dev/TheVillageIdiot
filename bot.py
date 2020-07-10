@@ -158,7 +158,7 @@ async def open_text(ctx, name):
 @commands.has_role('Chiefz')
 async def delete_text(ctx, name):
     if os.path.exists(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt"):
-        await ctx.channel.send("Deleting file:")
+        await ctx.channel.send(f"Deleting file: {name}.txt")
         os.remove(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt")
     else:
         await ctx.channel.send("Could not locate a file with that name!")
