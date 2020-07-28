@@ -105,8 +105,8 @@ async def resend(ctx, channel, amount):
         await discord.Message.delete(message)
         await cnl.send(msg)
 
-@bot.command(name='meme', help='sends a random meme from the meme theater')
-async def meme(ctx):
+@bot.command(name='meme', help='sends a random meme from the meme theater, append \'quality\' to use hall of fame')
+async def meme(ctx, quality):
     li = [
         "Please wait while I fetch you a quality meme from our collection...\n",
         "Your meme shall be  summoned shortly...\n",
@@ -124,7 +124,10 @@ async def meme(ctx):
     msg_num = random.randint(0,len(li)-1)
     await ctx.channel.send(li[msg_num])
 
-    channel = find_channel('meme-theater')
+    if quality == 'quality':
+        channel = find_channel('hall-of-fame')
+    else:
+        channel = find_channel('meme-theater')
     max = 0
     async for message in channel.history(limit=100000):
         max += 1
