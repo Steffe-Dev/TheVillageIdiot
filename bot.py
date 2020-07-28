@@ -147,6 +147,7 @@ async def meme(ctx, quality):
     
     print(f'Number of memes in database: {max}')
     await ctx.channel.send(message.content)
+    await ctx.channel.send(f'Number of memes in database: {max}')
 
 @bot.command(name='note', help='Makes a note that can be recalled. \nUsage: >>note *name* *content*')
 async def note(ctx, name, note):
