@@ -95,7 +95,15 @@ async def wipe(ctx, channel, contains):
         if message.content.find(contains) != -1:
             await discord.Message.delete(message)
 
-
+@bot.command(name='resend', help='resends messages on a channel')
+async def resend(ctx, channel, amount):
+    cnl = find_channel(channel)
+    async for message in cnl.history(limit=int(amount)):
+        msg = message.content
+        if msg.startswith('>>'):
+            continue
+        await discord.Message.delete(message)
+        await cnl.send(msg)
 
 @bot.command(name='meme', help='sends a random meme from the meme theater')
 async def meme(ctx):
