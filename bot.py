@@ -95,7 +95,7 @@ async def wipe(ctx, channel, contains):
         if message.content.find(contains) != -1:
             await discord.Message.delete(message)
 
-@bot.command(name='resend', help='resends messages on a channel')
+@bot.command(name='resend', help='resends messages on a channel, {cnl} {amount}')
 async def resend(ctx, channel, amount):
     cnl = find_channel(channel)
     async for message in cnl.history(limit=int(amount)):
