@@ -28,6 +28,7 @@ bot = commands.Bot(command_prefix='>>')
 # defines event handler for when client connects to discord
 @bot.event
 async def on_ready():
+    await meme_cache()
     for guild in bot.guilds:
         if guild.name == GUILD:
             break
@@ -134,36 +135,65 @@ async def meme(ctx, quality):
 
     if quality == 'quality':
         channel = find_channel('hall-of-fame')
+        fil = open(f"./memes/hof.txt", 'r')
     else:
         channel = find_channel('meme-theater')
-    max = 0
-    async for message in channel.history(limit=100000):
-        max += 1
+        fil = open(f"./memes/memes.txt", 'r')
 
-    num = random.randint(0,max)
-    prog = num % 10
+    max = int(fil.readline())
     i = 0
-    async for message in channel.history(limit=100000):
+    num = random.randint(0,max)
+    for line in fil:
         i += 1
-        print(f'{i}\'th msg, and it is: {message.content}. Num is {num}')
-        if message.content.startswith('N'):
-            continue
-        if i < num:
-            if (i % (num//10) == 0):
-                cur = i/num * 100
-                await ctx.channel.send(f"Progress is {round(cur,0)}%")
-            continue
-
-        if message.content.startswith('https://i.redd.it'):
+        print(f'{i}\'th msg, and it is: {line}. Num is {num}')
+        if (i == num):
             break
-    
+
     print(f'Number of memes in database: {max}')
-    await ctx.channel.send(message.content)
+    await ctx.channel.send(line)
     await ctx.channel.send(f'Number of memes in database: {max}')
+
+@bot.command(name='meme_cache', help='Forces a manual update to the txt file holding a cache of all the messages in the meme theater.')
+async def cache(ctx):
+    meme_cache()
+    
+async def meme_cache():
+    file_name_mt = open(f"./memes/mt.txt", 'w')
+    file_name_rmt = open(f"./memes/mt.txt", 'r')
+    file_name_m = open(f"./memes/memes.txt", 'w')
+    channel = find_channel('meme-theater')
+    i = 0
+    async for msg in channel.history(limit=1000000):
+        if msg.content.startswith('https://i.redd.it'):
+            i += 1
+            print(msg.content)
+            file_name_mt.write(msg.content + '\n')
+    file_name_m.write(str(i) + '\n')
+
+    for line in file_name_rmt:
+        file_name_m.write(line)
+
+    file_name_ht = open(f"./memes/mht.txt", 'w')
+    file_name_rht = open(f"./memes/mht.txt", 'r')
+    file_name_h = open(f"./memes/hof.txt", 'w')
+    channel2 = find_channel('hall-of-fame')
+    i = 0
+    async for msg in channel2.history(limit=1000000):
+        if msg.content.startswith('https://i.redd.it'):
+            i += 1
+            print(msg.content)
+            file_name_ht.write(msg.content + '\n')
+    file_name_h.write(str(i) + '\n')
+
+
+    for line in file_name_rht:
+        file_name_h.write(line)
+
+    print("successfully ran meme_cache")
 
 @bot.command(name='note', help='Makes a note that can be recalled. \nUsage: >>note *name* *content*')
 async def note(ctx, name, note):
-    file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'a')
+    file_name = open(f"./{name}.txt", 'a')
     file_name.write(note)
     await ctx.channel.send("Successfully wrote to file")
         
@@ -171,7 +201,7 @@ async def note(ctx, name, note):
 @bot.command(name='open_text_file', help='Opens a text file \n(They are saved on my pc, and then on a public github, so no sensitive info)')
 async def open_text(ctx, name):
     try:
-        file_name = open(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt", 'r')
+        file_name = open(f"./{name}.txt", 'r')
         await ctx.channel.send(f"Opening file: {name}.txt")
         for line in file_name:
             await ctx.channel.send(line)
@@ -181,15 +211,15 @@ async def open_text(ctx, name):
 @bot.command(name='delete_text_file', help='Deletes a text file \n(They are saved on my pc, and then on a public github)')
 @commands.has_role('Chiefz')
 async def delete_text(ctx, name):
-    if os.path.exists(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt"):
+    if os.path.exists(f"./{name}.txt"):
         await ctx.channel.send(f"Deleting file: {name}.txt")
-        os.remove(f"C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\{name}.txt")
+        os.remove(f"./{name}.txt")
     else:
         await ctx.channel.send("Could not locate a file with that name!")
 
 @bot.command(name='list_files', help='List all created text files \n(They are saved on my pc, and then on a public github)')
 async def list_text(ctx):
-    path = 'C:\\Users\\Francois\\Documents\\Programming\\Discord\\TheVillageIdiot\\'
+    path = './'
 
     files = []
     # r=root, d=directories, f = files
