@@ -105,7 +105,15 @@ async def resend(ctx, channel, amount):
         await discord.Message.delete(message)
         await cnl.send(msg)
 
-@bot.command(name='meme', help='sends a random meme from the meme theater, append \'quality\' to use hall of fame')
+@bot.command(name='meme_normal', help='sends a random meme from the meme theater')
+async def mn(ctx):
+    await meme(ctx,'1')
+
+
+@bot.command(name='meme_quality', help='sends a random meme from the hall of fame')
+async def mq(ctx):
+    await meme(ctx,'quality')
+
 async def meme(ctx, quality):
     li = [
         "Please wait while I fetch you a quality meme from our collection...\n",
@@ -133,6 +141,7 @@ async def meme(ctx, quality):
         max += 1
 
     num = random.randint(0,max)
+    prog = num % 10
     i = 0
     async for message in channel.history(limit=100000):
         i += 1
@@ -140,6 +149,9 @@ async def meme(ctx, quality):
         if message.content.startswith('N'):
             continue
         if i < num:
+            if (i % (num//10) == 0):
+                cur = i/num * 100
+                await ctx.channel.send(f"Progress is {round(cur,0)}%")
             continue
 
         if message.content.startswith('https://i.redd.it'):
