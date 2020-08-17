@@ -2,6 +2,7 @@
 #
 # Known Issues:
 #   if roll is called without a param, no msg is displayed to correct the user.
+#   First line in meme caches is corrupt
 
 import os
 import discord
@@ -155,41 +156,25 @@ async def meme(ctx, quality):
 
 @bot.command(name='meme_cache', help='Forces a manual update to the txt file holding a cache of all the messages in the meme theater.')
 async def cache(ctx):
-    meme_cache()
-    
+    await meme_cache()
+
 async def meme_cache():
-    file_name_mt = open(f"./memes/mt.txt", 'w')
-    file_name_rmt = open(f"./memes/mt.txt", 'r')
-    file_name_m = open(f"./memes/memes.txt", 'w')
-    channel = find_channel('meme-theater')
+    print("Running meme cache...")
+    await meme_cache_lower("meme-theater", "./memes/memes.txt")
+    await meme_cache_lower("hall-of-fame", "./memes/hof.txt")
+    print("Successfully ran meme_cache.")
+
+async def meme_cache_lower(channel, output):
+    file_name_mt = open(output, 'r+')
+    channel = find_channel(channel)
     i = 0
     async for msg in channel.history(limit=1000000):
         if msg.content.startswith('https://i.redd.it'):
             i += 1
-            print(msg.content)
             file_name_mt.write(msg.content + '\n')
-    file_name_m.write(str(i) + '\n')
-
-    for line in file_name_rmt:
-        file_name_m.write(line)
-
-    file_name_ht = open(f"./memes/mht.txt", 'w')
-    file_name_rht = open(f"./memes/mht.txt", 'r')
-    file_name_h = open(f"./memes/hof.txt", 'w')
-    channel2 = find_channel('hall-of-fame')
-    i = 0
-    async for msg in channel2.history(limit=1000000):
-        if msg.content.startswith('https://i.redd.it'):
-            i += 1
-            print(msg.content)
-            file_name_ht.write(msg.content + '\n')
-    file_name_h.write(str(i) + '\n')
-
-
-    for line in file_name_rht:
-        file_name_h.write(line)
-
-    print("successfully ran meme_cache")
+    content = file_name_mt.read()
+    file_name_mt.seek(0,0)
+    file_name_mt.write(str(i) + '\n' + content)
 
 @bot.command(name='note', help='Makes a note that can be recalled. \nUsage: >>note *name* *content*')
 async def note(ctx, name, note):
