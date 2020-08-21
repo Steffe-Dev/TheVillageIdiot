@@ -29,6 +29,7 @@ bot = commands.Bot(command_prefix='>>')
 # defines event handler for when client connects to discord
 @bot.event
 async def on_ready():
+    await bot.change_presence(activity=discord.Game(name="meme cache"))
     await meme_cache()
     for guild in bot.guilds:
         if guild.name == GUILD:
@@ -41,6 +42,7 @@ async def on_ready():
 
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Guild Members:\n - {members}')
+    await bot.change_presence(activity=discord.Game(name=">>help"))
 
 # when new member joins the server
 @bot.event
